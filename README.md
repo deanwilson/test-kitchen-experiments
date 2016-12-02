@@ -20,6 +20,10 @@ If you're interested in running your tests against a full EC2 instance then the
 amazingly named [puppet-simple-aws-ec2](/puppet-simple-aws-ec2/) example will
 hopefully be useful.
 
+Testing a manifest against [multiple puppet versions on EC2](/multiple-puppet-versions-aws-
+ec2/) is remarkably easy once you've got the basic EC2 tests working. In fact it
+only requires changes to two files.
+
 ### Author
 
 [Dean Wilson](http://www.unixdaemon.net)

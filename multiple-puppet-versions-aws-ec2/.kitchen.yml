@@ -1,0 +1,53 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: "<%= ENV['TEST_KITCHEN_EC2_SSH_KEY_ID'] %>"
+  security_group_ids: [ "<%= ENV['TEST_KITCHEN_EC2_SECURITY_GROUP_ID'] %>"]
+  region: "eu-west-1"
+  instance_type: t2.large
+  associate_public_ip: true
+  interface: dns
+  shared_credentials_profile: "<%= ENV['TEST_KITCHEN_EC2_PROFILE'] %>"
+  tags:
+    created-by: test-kitchen
+    owner: "<%= ENV['USER'] %>"
+
+
+transport:
+  ssh_key: "~/.ssh/<%= ENV['TEST_KITCHEN_EC2_SSH_KEY_ID'] %>"
+  connection_timeout: 10
+  connection_retries: 5
+  username: ubuntu
+
+
+provisioner:
+  name: puppet_apply
+  require_chef_for_busser: false
+  manifests_path: .
+  modules_path: ../
+  # this is only needed for our example repo. in a normal module the paths would be correct
+  custom_pre_apply_command: "mv /tmp/kitchen/modules/multiple-puppet-versions-aws-ec2 /tmp/kitchen/modules/local_apache"
+
+verifier:
+  name: inspec
+
+
+platforms:
+  - name: ubuntu-1404-puppet-3
+    driver:
+      image_id: ami-f95ef58a
+      tags:
+        Name: "<%= ENV['USER'] %>-ubuntu-1404-puppet-3-test-kitchen"
+
+  - name: ubuntu-1604-puppet-4
+    driver:
+      image_id: ami-a4d44ed7
+      tags:
+        Name: "<%= ENV['USER'] %>-ubuntu-1604-puppet-4-test-kitchen"
+    provisioner:
+      puppet_apt_repo: https://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
+      require_puppet_collections: true
+
+
+suites:
+  - name: default
