@@ -5,7 +5,7 @@ driver:
 provisioner:
   name: puppet_apply
   require_chef_for_busser: false
-  manifests_path: manifests
+  manifests_path: .
   modules_path: ../
 
 verifier:
